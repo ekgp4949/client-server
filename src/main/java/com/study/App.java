@@ -3,69 +3,44 @@
  */
 package com.study;
 
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 
-import com.study.lesson.Lesson;
+import com.study.lesson.LessonHandler;
 
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
+	public String getGreeting() {
+		return "Hello world.";
+	}
 
-    static Map<Integer, Lesson> lessonMap = new HashMap<>();
-    static Scanner scan = new Scanner(System.in);
-    
-    public static void main(String[] args) {
-    	
-    	String command;
-    	while(true) {
-    		command = prompt();
-    		if(command.equals("quit")) {
-    			break;
-    		}
-    		if(command.equals("/lesson/add")) {
-    			addLesson();
-    		} else if(command.equals("/lesson/list")) {
-    			listLesson();
-    		}
-    		
-    	}
-    	
-    	scan.close();
-    }
-    
-    private static String prompt() {
-    	System.out.print("명령> ");
-		return scan.nextLine().toLowerCase();
-    }
-    
-    private static void addLesson() {
-    	Lesson lesson = new Lesson();
-		System.out.print("번호? ");
-		lesson.setNo(Integer.parseInt(scan.nextLine()));
-		System.out.print("수업명? ");
-		lesson.setTitle(scan.nextLine());
-		System.out.print("수업내용? ");
-		lesson.setContents(scan.nextLine());
-		System.out.print("시작일? ");
-		lesson.setStartDate(Date.valueOf(scan.nextLine()));
-		System.out.print("종료일? ");
-		lesson.setEndDate(Date.valueOf(scan.nextLine()));
-		System.out.print("총수업시간? ");
-		lesson.setTotalHours(Integer.parseInt(scan.nextLine()));
-		System.out.print("일수업시간? ");
-		lesson.setDayHours(Integer.parseInt(scan.nextLine()));
-		lessonMap.put(lesson.getNo(), lesson);
-		System.out.println("저장하였습니다.");
-    }
-    
-    private static void listLesson() {
-    	for(Entry<Integer, Lesson> entry : lessonMap.entrySet()) {
-			System.out.println(entry.getValue());
+	static Scanner scan = new Scanner(System.in); // 공유하는 것이므로 static으로 둠
+
+	public static void main(String[] args) {
+
+		LessonHandler lessonHandler = new LessonHandler(scan); // lessonHandler 하나 당 하나의 LessonMap 객체
+		LessonHandler lessonHandler2 = new LessonHandler(scan); // lessonHandler 하나 당 하나의 LessonMap 객체
+
+		String command;
+		while(true) {
+			command = prompt();
+			if(command.equals("/lesson/add")) {
+				lessonHandler.addLesson();
+			} else if(command.equals("/lesson/list")) {
+				lessonHandler.listLesson();
+			} if(command.equals("/lesson2/add")) {
+				lessonHandler2.addLesson();
+			} else if(command.equals("/lesson2/list")) {
+				lessonHandler2.listLesson();
+			} else if(command.equals("quit")) {
+				break;
+			}
+
 		}
-    }
+
+		scan.close();
+	}
+
+	private static String prompt() {
+		System.out.print("명령> ");
+		return scan.nextLine().toLowerCase();
+	}
 }
