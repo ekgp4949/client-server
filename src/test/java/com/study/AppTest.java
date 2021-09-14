@@ -3,13 +3,18 @@
  */
 package com.study;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class AppTest {
-    @Test 
+	
+	@DisplayName("App 테스트")
+    @Test
     public void testAppHasAGreeting() {
         App classUnderTest = new App();
-        assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+        assertThat(true).isTrue();
+        assertThat(classUnderTest).isNotNull();;
     }
 }
