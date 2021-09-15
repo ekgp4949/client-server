@@ -4,23 +4,31 @@
 package com.study;
 
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 import com.study.lesson.LessonHandler;
+import com.study.util.Stack;
 
 public class App {
+	private final static Logger logger = Logger.getLogger(App.class.getName());
+
 	public String getGreeting() {
 		return "Hello world.";
 	}
 
 	static Scanner scan = new Scanner(System.in); // 공유하는 것이므로 static으로 둠
 
-	public static void main(String[] args) {
+
+	static Stack<String> history = new Stack<>();
+
+	public static void main(String[] args) throws Exception{
 
 		LessonHandler lessonHandler = new LessonHandler(scan); // lessonHandler 하나 당 하나의 LessonMap 객체
 
 		String command;
 		while(true) {
 			command = prompt();
+			history.push(command);
 			if(command.equals("/lesson/add")) {
 				lessonHandler.addLesson();
 			} else if(command.equals("/lesson/list")) {
@@ -31,6 +39,8 @@ public class App {
 				lessonHandler.updateLesson();
 			} else if(command.equals("/lesson/delete")) {
 				lessonHandler.deleteLesson();
+			} else if(command.equals("/history")) {
+				printCommandHistory();
 			} else if(command.equals("quit")) {
 				break;
 			}
@@ -43,5 +53,17 @@ public class App {
 	private static String prompt() {
 		System.out.print("명령> ");
 		return scan.nextLine().toLowerCase();
+	}
+
+	private static void printCommandHistory() {
+		try {
+			Stack<String> commandHistory = history.clone();
+			int size = commandHistory.size();
+			for(int i = 0; i < size ; i++) {
+				System.out.println(commandHistory.pop());
+			}
+		} catch(Exception e) {
+			logger.warning("명령어 출력 오류남");
+		}
 	}
 }
