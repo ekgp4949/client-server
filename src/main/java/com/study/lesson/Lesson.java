@@ -2,7 +2,7 @@ package com.study.lesson;
 
 import java.sql.Date;
 
-public class Lesson {
+public class Lesson implements Cloneable {
 	private int no;
 	private String title;
 	private String contents;
@@ -58,5 +58,9 @@ public class Lesson {
 				+ ", 종료일=" + endDate + ", 총수업시간=" + totalHours + ", 일수업시간=" + dayHours + "]";
 	}
 
+	@Override
+	public Lesson clone() throws CloneNotSupportedException {
+		return (Lesson)super.clone();
+	}
 
 }
