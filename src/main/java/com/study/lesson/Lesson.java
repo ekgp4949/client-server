@@ -3,13 +3,13 @@ package com.study.lesson;
 import java.sql.Date;
 
 public class Lesson {
-	int no;
-	String title;
-	String contents;
-	Date startDate;
-	Date endDate;
-	int totalHours;
-	int dayHours;
+	private int no;
+	private String title;
+	private String contents;
+	private Date startDate;
+	private Date endDate;
+	private int totalHours;
+	private int dayHours;
 	public int getNo() {
 		return no;
 	}
@@ -57,6 +57,6 @@ public class Lesson {
 		return "Lesson [번호=" + no + ", 수업명=" + title + ", 수업내용=" + contents + ", 시작일=" + startDate
 				+ ", 종료일=" + endDate + ", 총수업시간=" + totalHours + ", 일수업시간=" + dayHours + "]";
 	}
-	
-	
+
+
 }
