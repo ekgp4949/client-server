@@ -24,7 +24,7 @@ public class Stack<E> implements Cloneable{
 
 	public void push(E e) {
 		if(size >= DEFUALT_SIZE) {
-			list = Arrays.copyOf(list, list.length + list.length >> 1);
+			list = Arrays.copyOf(list, list.length + (list.length >> 1));
 		}
 		list[size++] = e;
 	}
