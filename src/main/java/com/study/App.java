@@ -17,7 +17,6 @@ public class App {
 	public static void main(String[] args) {
 
 		LessonHandler lessonHandler = new LessonHandler(scan); // lessonHandler 하나 당 하나의 LessonMap 객체
-		LessonHandler lessonHandler2 = new LessonHandler(scan); // lessonHandler 하나 당 하나의 LessonMap 객체
 
 		String command;
 		while(true) {
@@ -26,10 +25,12 @@ public class App {
 				lessonHandler.addLesson();
 			} else if(command.equals("/lesson/list")) {
 				lessonHandler.listLesson();
-			} if(command.equals("/lesson2/add")) {
-				lessonHandler2.addLesson();
-			} else if(command.equals("/lesson2/list")) {
-				lessonHandler2.listLesson();
+			} else if(command.equals("/lesson/detail")) {
+				lessonHandler.detailLesson();
+			} else if(command.equals("/lesson/update")) {
+				lessonHandler.updateLesson();
+			} else if(command.equals("/lesson/delete")) {
+				lessonHandler.deleteLesson();
 			} else if(command.equals("quit")) {
 				break;
 			}
