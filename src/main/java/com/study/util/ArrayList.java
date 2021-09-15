@@ -22,7 +22,7 @@ public class ArrayList<E> {
 
 	public void add(E e) {
 		if(size >= list.length) {
-			list = Arrays.copyOf(list, list.length + list.length >> 1);
+			list = Arrays.copyOf(list, list.length + (list.length >> 1));
 		}
 		list[size++] = e;
 	}
