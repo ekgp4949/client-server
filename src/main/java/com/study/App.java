@@ -64,16 +64,4 @@ public class App {
 		System.out.print("명령> ");
 		return scan.nextLine().toLowerCase();
 	}
-
-	private static void printCommandHistory() {
-		try {
-			Stack<String> commandHistory = history.clone();
-			int size = commandHistory.size();
-			for(int i = 0; i < size ; i++) {
-				System.out.println(commandHistory.pop());
-			}
-		} catch(Exception e) {
-			logger.warning("명령어 출력 오류남");
-		}
-	}
 }
