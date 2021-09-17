@@ -50,9 +50,15 @@ public class App {
 			history.push(command);
 			Command commandHandler = commandMap.get(command);
 			if(commandHandler != null) {
-				commandHandler.execute();
+				try {
+					commandHandler.execute();
+				} catch(Exception ex) {
+					System.out.println("명령어 실행 중 오류 발생");
+				}
 			} else if(command.equals("quit")) {
 				break;
+			} else {
+				System.out.println("실행할 수 없는 명령입니다.");
 			}
 
 		}
