@@ -2,14 +2,14 @@ package com.study.util;
 
 import java.util.Arrays;
 
-public class Stack<E> implements Cloneable{
+public class Stack<E> implements Cloneable {
 	private static final int DEFUALT_SIZE = 10;
 
 	private Object[] list;
 	private int size = 0;
 
 	@Override
-	public Stack<E> clone() throws CloneNotSupportedException {
+	public Stack<E> clone() {
 		// 깊은 복사 해줘야함.
 		Stack<E> stack = new Stack<>();
 		for(int i = 0; i < size; i++) {
@@ -43,5 +43,19 @@ public class Stack<E> implements Cloneable{
 
 	public boolean isEmpty() {
 		return size == 0;
+	}
+
+	public Iterator<E> iterator() {
+		return new Iterator<>() {
+			Stack<E> tmp = Stack.this.clone();
+			@Override
+			public E next() {
+				return tmp.pop();
+			}
+			@Override
+			public boolean hasNext() {
+				return !tmp.isEmpty();
+			}
+		};
 	}
 }

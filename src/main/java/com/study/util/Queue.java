@@ -3,7 +3,7 @@ package com.study.util;
 public class Queue<E> extends LinkedList<E> implements Cloneable {
 
 	@Override
-	public Queue<E> clone() throws CloneNotSupportedException {
+	public Queue<E> clone() {
 		Queue<E> temp = new Queue<>();
 		for(int i = 0; i < this.size(); i++) {
 			temp.offer(this.get(i));
@@ -24,5 +24,19 @@ public class Queue<E> extends LinkedList<E> implements Cloneable {
 
 	public boolean empty() {
 		return size() == 0;
+	}
+
+	public Iterator<E> iterator() {
+		return new Iterator<>() {
+			Queue<E> tmp = Queue.this.clone();
+			@Override
+			public E next() {
+				return tmp.poll();
+			}
+			@Override
+			public boolean hasNext() {
+				return !tmp.empty();
+			}
+		};
 	}
 }
