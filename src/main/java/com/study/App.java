@@ -3,6 +3,12 @@
  */
 package com.study;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -33,9 +39,11 @@ public class App {
 	// 단점은 각 명령에 대해 매번 클래스를 만들어야 하는 것이다.
 
 	static Map<String, Command> commandMap = new HashMap<>();
+	static Map<Integer, Lesson> lessonMap = new HashMap<>();
 
 	public static void main(String[] args) throws Exception{
-		Map<Integer, Lesson> lessonMap = new HashMap<>();
+
+		readLessonCsv();
 
 		commandMap.put("/lesson/add", new LessonAddCommand(scan, lessonMap));
 		commandMap.put("/lesson/list", new LessonListCommand(scan, lessonMap));
@@ -43,6 +51,7 @@ public class App {
 		commandMap.put("/lesson/detail", new LessonDetailCommand(scan, lessonMap));
 		commandMap.put("/lesson/delete", new LessonDeleteCommand(scan, lessonMap));
 		commandMap.put("/history", new PrintHistoryCommand(history));
+
 
 		String command;
 		while(true) {
@@ -63,11 +72,76 @@ public class App {
 
 		}
 
+		writeLessonCsv();
+
 		scan.close();
 	}
 
 	private static String prompt() {
 		System.out.print("명령> ");
 		return scan.nextLine().toLowerCase();
+	}
+
+	/**
+	 * lesson.csv 읽는 작업
+	 * */
+	private static void readLessonCsv() {
+		BufferedReader reader = null;
+		FileReader in = null;
+
+		try {
+			File file = new File("lesson.csv");
+			if(!file.exists()) {
+				file.createNewFile();
+			}
+			in = new FileReader(file);
+			reader = new BufferedReader(in);
+			String line = null;
+			while((line = reader.readLine())!= null) {
+				String[] values = line.split(",");
+
+				Lesson lesson = Lesson.builder()
+						.no(Integer.parseInt(values[0]))
+						.title(values[1])
+						.contents(values[2])
+						.startDate(Date.valueOf(values[3]))
+						.endDate(Date.valueOf(values[4]))
+						.totalHours(Integer.parseInt(values[5]))
+						.dayHours(Integer.parseInt(values[0])).build();
+
+				lessonMap.put(lesson.getNo(), lesson);
+			}
+		} catch(Exception e) {
+			System.out.println("수업 데이터 읽는 중 오류 발생");
+			e.printStackTrace();
+		} finally {
+			try {reader.close();} catch (Exception e) {};
+			try {in.close();} catch (Exception e) {};
+		}
+	}
+
+	/**
+	 * lesson csv 쓰는 작업
+	 * */
+	private static void writeLessonCsv() {
+		BufferedWriter writer = null;
+		FileWriter out = null;
+		try {
+			File file = new File("lesson.csv");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			out = new FileWriter(file);
+			writer = new BufferedWriter(out);
+			for(Lesson lesson : lessonMap.values()) {
+				writer.write(lesson.csv()+"\n");
+			}
+			writer.flush();
+		} catch(Exception e) {
+			System.out.println("수업 데이터 쓰는 중 오류 발생");
+		} finally {
+			try {writer.close();} catch (Exception e) {}
+			try {out.close();} catch (Exception e) {}
+		}
 	}
 }
