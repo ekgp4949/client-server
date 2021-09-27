@@ -1,5 +1,6 @@
 package com.study.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +14,9 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Lesson implements Cloneable {
+public class Lesson implements Cloneable, Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private int no;
 	private String title;
 	private String contents;

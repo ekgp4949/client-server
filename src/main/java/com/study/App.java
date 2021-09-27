@@ -3,13 +3,22 @@
  */
 package com.study;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -43,7 +52,8 @@ public class App {
 
 	public static void main(String[] args) throws Exception{
 
-		readLessonCsv();
+		//readLessonCsv();
+		readLessonBin();
 
 		commandMap.put("/lesson/add", new LessonAddCommand(scan, lessonMap));
 		commandMap.put("/lesson/list", new LessonListCommand(scan, lessonMap));
@@ -72,7 +82,8 @@ public class App {
 
 		}
 
-		writeLessonCsv();
+		// writeLessonCsv();
+		writeLessonBin();
 
 		scan.close();
 	}
@@ -80,6 +91,52 @@ public class App {
 	private static String prompt() {
 		System.out.print("명령> ");
 		return scan.nextLine().toLowerCase();
+	}
+
+	/**
+	 * lesson binary 읽는 작업
+	 * */
+	private static void readLessonBin() {
+		ObjectInputStream in = null;
+		try {
+			File file = new File("lesson.bin");
+			if(!file.exists()) {
+				file.createNewFile();
+				return;
+			}
+			in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+
+			Iterator<Lesson> iterator = ((ArrayList<Lesson>) in.readObject()).iterator();
+			while(iterator.hasNext()) {
+				Lesson lesson = iterator.next();
+				lessonMap.put(lesson.getNo(), lesson);
+			}
+
+
+		} catch(Exception e) {
+			System.out.println("수업 데이터 읽는 중 오류 발생");
+			e.printStackTrace();
+		} finally {
+			try {in.close();} catch (Exception e) {};
+		}
+	}
+
+	/**
+	 * lesson binary 쓰는 작업
+	 * */
+	private static void writeLessonBin() {
+		try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(
+				new FileOutputStream("lesson.bin")))) {
+
+			// 첫 번째로 데이터의 개수(int)를 먼저 출력한다.
+			List<Lesson> list = new ArrayList<>();
+			lessonMap.forEach((key, lesson) -> {
+				list.add(lesson);
+			});
+			out.writeObject(list);
+		} catch(Exception e) {
+			System.out.println("수업 데이터 쓰는 중 오류 발생");
+		}
 	}
 
 	/**
